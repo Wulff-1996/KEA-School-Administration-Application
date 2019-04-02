@@ -20,3 +20,13 @@ We had to build an application that will administrate the schools teachers, cour
 We used Scrum for managing the project, and all the related practices, example scrumboard, planning poker etc.
 We also used UML to create diagrams, for the big design decisions.
 
+## Manual
+1. Clone the repo.
+2. Build the project with IntelliJ
+3. Run the KEA_ADMIN_DB_POPULATE script
+4. Open browser and navigate to localhost:8080
+5. Log in:
+  admin: username: Jarlen, password: 123
+  student: username: Paul69, password: 123
+  teacher: username: MuskelMartin, password: 123
+
