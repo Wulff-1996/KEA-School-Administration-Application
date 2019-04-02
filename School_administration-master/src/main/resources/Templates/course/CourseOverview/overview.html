@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Course Overview</title>
+    <link href="/CSS/kartotek_style.css" rel="stylesheet">
+    <script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <th:block th:include="_navigation"></th:block>
+    <script>
+        function details(id){
+            var modal = $("#details");
+            $.getJSON("http://localhost:8080/course/ajaxdetails?id=" + id,function (data,status) {
+                $("#danishName").text(data.nameDanish);
+                $("#englishName").text(data.nameEnglish);
+                $("#description").text(data.description);
+                $("#semester").text(data.semester);
+                $("#studyProgramme").text(data.studyProgramme);
+                $("#mandatory").text(data.mandatory);
+                $("#ects").text(data.ects);
+                $("#language").text(data.language);
+                $("#minimum").text(data.minimumStudents);
+                $("#expected").text(data.expectedStudents);
+                $("#maximum").text(data.maximumStudents);
+                $("#numberOfTeachers").text(data.numberOfTeachers);
+                $("#prerequisites").text(data.prerequisites);
+                $("#content").text(data.content);
+                $("#learningActivities").text(data.learningActivities);
+                $("#learningOutcome").text(data.learningOutcome);
+                $("#examForm").text(data.examForm);
+                console.log(status);
+                console.log(data);
+            });
+            modal.fadeIn("slow");
+        };
+        $(document).ready(function (){
+            $(".popupCloseButton").click(function () {
+                $("#details").hide();
+                $("#create").hide();
+            });
+            $("#btncreate").click(function () {
+                $("#create").fadeIn("slow");
+            });
+            $("#inputSearch").on("input", function() {
+                var value = $(this).val().toLowerCase();
+                $("#table tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+
+
+    <div>
+        <th:block th:include="course/CourseOverview/popupDetails"></th:block>
+    </div>
+
+    <div>
+        <th:block th:include="course/CourseOverview/popupCreate"></th:block>
+    </div>
+
+
+    <div class="container">
+        <header>
+            <h1>Course Overview</h1>
+        </header>
+
+        <div>
+            <input id="btncreate" th:if="${isTeacherOrAdmin}" th:value="Create" type="button" class="btn btn-create btn:hover">
+            <p th:text="'Total Amount of Courses:' + ' ' + ${count}"></p>
+            <input id="inputSearch" placeholder="search" type="search" class="form" style="float: right">
+        </div>
+        <br>
+
+        <p></p>
+        <table class="sortable" id="table">
+            <thead>
+            <tr>
+                <th>Danish Name</th>
+                <th>English Name</th>
+                <th>Course Language</th>
+                <th>ECTS Points</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="course: ${courses}">
+                <td th:text="${course.nameDanish}"></td>
+                <td th:text="${course.nameEnglish}"></td>
+                <td th:text="${course.language}"></td>
+                <td th:text="${course.ECTS}"></td>
+                <td>
+                    <button th:onclick="'javascript:details(' + ${course.id} + ')'" class="btn btn-ed btn:hover">Details</button>
+                    <a type="button" class="btn btn-ed btn:hover" th:href="${'/course/details?id=' + course.id}">More</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <footer>
+            <th:block th:include="_footer"></th:block>
+        </footer>
+        <br>
+        <br>
+    </div>
+</body>
+</html>
